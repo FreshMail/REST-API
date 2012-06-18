@@ -15,8 +15,7 @@ try {
     print_r($response);
     echo PHP_EOL;
 } catch (Exception $e) {
-    echo 'Error: ';
-    print_r($rest->getResponse());
+    echo 'Error message: '.$e->getMessage().', Error code: '.$e->getCode().', HTTP code: '.$rest->getHttpCode().PHP_EOL;
 }
 
 //testing POST request
@@ -28,6 +27,5 @@ try {
     print_r($response);
     echo PHP_EOL;
 } catch (Exception $e) {
-    echo 'Error: ';
-    print_r($rest->getResponse());
+    echo 'Error message: '.$e->getMessage().', Error code: '.$e->getCode().', HTTP code: '.$rest->getHttpCode().PHP_EOL;
 }

@@ -26,6 +26,5 @@ try {
     print_r($response);
     echo PHP_EOL;
 } catch (Exception $e) {
-    echo 'Error while sending mail: ';
-    print_r($rest->getResponse());
+    echo 'Error message: '.$e->getMessage().', Error code: '.$e->getCode().', HTTP code: '.$rest->getHttpCode().PHP_EOL;
 }

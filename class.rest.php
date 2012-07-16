@@ -153,7 +153,7 @@ class RestException extends Exception
 
 /* USAGE: *****
 
-$rest = new RestApi();
+$rest = new FmRestApi();
 $rest->setApiSecret(API_SECRET);
 $rest->setApiKey(API_KEY);
 

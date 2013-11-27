@@ -1,5 +1,9 @@
 <?php
 
+namespace FreshMail;
+
+use Exception;
+
 /**
  *  Klasa do uwierzytelniania i wysyłania danych za pomocą REST API FreshMail
  *
@@ -7,10 +11,8 @@
  *  @since  2012-06-14
  *
  */
-
-class FmRestApi
+class RestApi
 {
-
     private $strApiSecret   = null;
     private $strApiKey      = null;
     private $response    = null;
@@ -18,8 +20,8 @@ class FmRestApi
     private $httpCode    = null;
     private $contentType = 'application/json';
 
-    const host   = 'https://app.freshmail.pl/';
-    const prefix = 'rest/';
+    const HOST   = 'https://app.freshmail.pl/';
+    const PREFIX = 'rest/';
     //--------------------------------------------------------------------------
 
     /**
@@ -29,7 +31,7 @@ class FmRestApi
      */
     public function getErrors()
     {
-        if ( isset( $this->errors['errors'] ) ) {
+        if (isset($this->errors['errors'])) {
             return $this->errors['errors'];
         }
 
@@ -63,44 +65,47 @@ class FmRestApi
     /**
      * Metoda ustawia secret do API
      *
-     * @param type $strSectret
+     * @param  type     $strSectret
      * @return rest_api
      */
-    public function setApiSecret( $strSectret = '' )
+    public function setApiSecret($strSectret = '')
     {
         $this->strApiSecret = $strSectret;
+
         return $this;
     } // setApiSecret
 
-    public function setContentType( $contentType = '' )
+    public function setContentType($contentType = '')
     {
         $this->contentType = $contentType;
+
         return $this;
     }
 
     /**
      * Metoda ustawia klucz do API
      *
-     * @param string $strKey
+     * @param  string   $strKey
      * @return rest_api
      */
-    public function setApiKey ( $strKey = '' )
+    public function setApiKey($strKey = '')
     {
         $this->strApiKey = $strKey;
+
         return $this;
     } // setApiKey
 
-    public function doRequest( $strUrl, $arrParams = array(), $boolRawResponse = false )
+    public function doRequest($strUrl, $arrParams = array(), $boolRawResponse = false)
     {
-        if ( empty($arrParams) ) {
+        if (empty($arrParams)) {
             $strPostData = '';
-        } elseif ( $this->contentType == 'application/json' ) {
-            $strPostData = json_encode( $arrParams );
-        } elseif ( !empty($arrParams) ) {
-            $strPostData = http_build_query( $arrParams );
+        } elseif ($this->contentType == 'application/json') {
+            $strPostData = json_encode($arrParams);
+        } elseif (!empty($arrParams)) {
+            $strPostData = http_build_query($arrParams);
         }
 
-        $strSign = sha1( $this->strApiKey . '/' . self::prefix . $strUrl . $strPostData . $this->strApiSecret );
+        $strSign = sha1($this->strApiKey . '/' . self::PREFIX . $strUrl . $strPostData . $this->strApiSecret);
 
         $arrHeaders = array();
         $arrHeaders[] = 'X-Rest-ApiKey: ' . $this->strApiKey;
@@ -110,24 +115,24 @@ class FmRestApi
             $arrHeaders[] = 'Content-Type: '.$this->contentType;
         }
 
-        $resCurl = curl_init( self::host . self::prefix . $strUrl );
-        curl_setopt( $resCurl, CURLOPT_HTTPHEADER, $arrHeaders );
-        curl_setopt( $resCurl, CURLOPT_HEADER, false );
-        curl_setopt( $resCurl, CURLOPT_RETURNTRANSFER, true);
+        $resCurl = curl_init(self::HOST . self::PREFIX . $strUrl);
+        curl_setopt($resCurl, CURLOPT_HTTPHEADER, $arrHeaders);
+        curl_setopt($resCurl, CURLOPT_HEADER, false);
+        curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, true);
 
         if ($strPostData) {
-            curl_setopt( $resCurl, CURLOPT_POST, true);
-            curl_setopt( $resCurl, CURLOPT_POSTFIELDS, $strPostData );
+            curl_setopt($resCurl, CURLOPT_POST, true);
+            curl_setopt($resCurl, CURLOPT_POSTFIELDS, $strPostData);
         } // endif
 
-        $this->rawResponse = curl_exec( $resCurl );
-        $this->httpCode = curl_getinfo( $resCurl, CURLINFO_HTTP_CODE );
+        $this->rawResponse = curl_exec($resCurl);
+        $this->httpCode = curl_getinfo($resCurl, CURLINFO_HTTP_CODE);
 
         if ($boolRawResponse) {
             return $this->rawResponse;
         } // endif
 
-        $this->response = json_decode( $this->rawResponse, true );
+        $this->response = json_decode($this->rawResponse, true);
         if ($this->httpCode != 200) {
             $this->errors = $this->response['errors'];
             if (is_array($this->errors)) {
@@ -143,50 +148,4 @@ class FmRestApi
 
         return $this->response;
     } // doRequest
-
 }
-
-class RestException extends Exception
-{
-}
-
-
-/* USAGE: *****
-
-$rest = new FmRestApi();
-$rest->setApiSecret(API_SECRET);
-$rest->setApiKey(API_KEY);
-
-//ping GET (do testowania autoryzacji)
-try {
-    $response = $rest->doRequest('ping');
-    print_r($response);
-} catch (Exception $e) {
-    //echo 'Code: '.$e->getCode().' Message: '.$e->getMessage()."\n";
-    print_r($rest->getResponse());
-}
-
-//ping POST (do testowania autoryzacji)
-try {
-    $postdata = array('any required data');
-    $response = $rest->doRequest('ping', $postdata);
-    print_r($response);
-} catch (Exception $e) {
-    //echo 'Code: '.$e->getCode().' Message: '.$e->getMessage()."\n";
-    print_r($rest->getResponse());
-}
-
-//mail POST
-try {
-    $data = array('subscriber' => 'put email address here',
-                  'subject' => 'put subject',
-                  'text' => 'put text message',
-                  'html' => '<strong>put HTML message here</strong>');
-    $response = $rest->doRequest('mail', $data);
-    print_r($response);
-} catch (Exception $e) {
-    //echo 'Code: '.$e->getCode().' Message: '.$e->getMessage()."\n";
-    print_r($rest->getResponse());
-}
-
-*/

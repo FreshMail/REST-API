@@ -18,7 +18,7 @@ Use in php project:
 
 ## Installation by hand
 
-    require_once 'class.rest.php'
+    require_once 'class.rest.php';
     require_once 'config.php';
 
 ## Examples

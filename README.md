@@ -4,7 +4,7 @@ A php library which implements the functionality of FreshMail REST API.
 
 ## Installation via composer
 
-Add to `to composer.json` file:
+Add to `composer.json` file:
 
     {
         "require": {

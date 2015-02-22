@@ -18,7 +18,7 @@ class FmRestApi
     private $httpCode    = null;
     private $contentType = 'application/json';
 
-    const host   = 'https://app.freshmail.pl/';
+    const host   = 'https://api.freshmail.com/';
     const prefix = 'rest/';
     //--------------------------------------------------------------------------
 

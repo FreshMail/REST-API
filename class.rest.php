@@ -138,7 +138,7 @@ class FmRestApi
         } // endif
 
         if (is_array($this->response) == false) {
-            throw new Exception('Invalid json response');
+            throw new Exception('Connection error - curl error message: '.curl_error($resCurl).' ('.curl_errno($resCurl).')');
         } // endif
 
         return $this->response;

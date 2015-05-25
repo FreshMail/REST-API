@@ -17,6 +17,7 @@ class FmRestApi
     private $rawResponse = null;
     private $httpCode    = null;
     private $contentType = 'application/json';
+	private $sslCaPath   = '/etc/ssl/certs';
 
     const host   = 'https://api.freshmail.com/';
     const prefix = 'rest/';
@@ -114,6 +115,10 @@ class FmRestApi
         curl_setopt( $resCurl, CURLOPT_HTTPHEADER, $arrHeaders );
         curl_setopt( $resCurl, CURLOPT_HEADER, false );
         curl_setopt( $resCurl, CURLOPT_RETURNTRANSFER, true);
+
+		if (is_readable( $self::sslCaPath . '/ca-certificates.crt')) {
+			curl_setopt( $resCurl, CURLOPT_CAPATH, $self::sslCaPath );
+		}
 
         if ($strPostData) {
             curl_setopt( $resCurl, CURLOPT_POST, true);

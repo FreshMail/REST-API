@@ -122,7 +122,7 @@ class FmRestApi
         } // endif
 
         $this->rawResponse = curl_exec( $resCurl );
-        $ernno = curl_errno( $resCurl );
+        $errno = curl_errno( $resCurl );
 
         // CURLE_SSL_CACERT || CURLE_SSL_CACERT_BADFILE
         if (($errno == 60 || $errno = 70) && version_compare(PHP_VERSION, '5.3.7') >= 0) {

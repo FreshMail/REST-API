@@ -1,0 +1,23 @@
+{
+    "name": "FreshMail/REST-API",
+    "description": "REST API",
+    "license": "GPL-3.0",
+    "authors": [{
+        "name": "Tadeusz Kania",
+        "email": "tadeusz.kania@freshmail.pl",
+        "homepage": "https://freshmail.pl",
+        "role": "Developer"
+      },{
+        "name": "Piotr Suszalski",
+        "email": "piotr.suszalski@freshmail.pl",
+        "homepage": "https://freshmail.pl",
+        "role": "Developer"
+      }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "files": ["class.rest.php", "config.php"]
+    }
+}

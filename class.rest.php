@@ -128,18 +128,7 @@ class FmRestApi
             return $this->rawResponse;
         }
 
-        $header_size = curl_getinfo($resCurl, CURLINFO_HEADER_SIZE);
-        $header = substr($this->rawResponse, 0, $header_size);
-        $TypePatern = '/Content-Type:\s*([a-z-Z\/]*)\s/';
-        preg_match($TypePatern, $header, $responseType);
-        if(strtolower($responseType[1]) == 'application/zip') {
-            $filePatern = '/filename\=\"([a-zA-Z0-9\.]+)\"/';
-            preg_match($filePatern, $header, $fileName);
-            file_put_contents(self::defaultFilePath.$fileName[1], substr($this->rawResponse, $header_size));
-            $this->response = array('path' =>self::defaultFilePath.$fileName[1]);
-        } else {
-            $this->response = json_decode( substr($this->rawResponse, $header_size), true );
-        }
+        $this->_getResponseFromHeaders();
 
         if ($this->httpCode != 200) {
             $this->errors = $this->response['errors'];
@@ -154,6 +143,23 @@ class FmRestApi
             throw new Exception('Connection error - curl error message: '.curl_error($resCurl).' ('.curl_errno($resCurl).')');
         }
 
+        return $this->response;
+    }
+
+    private function _getResponseFromHeaders($resCurl)
+    {
+        $header_size = curl_getinfo($resCurl, CURLINFO_HEADER_SIZE);
+        $header = substr($this->rawResponse, 0, $header_size);
+        $TypePatern = '/Content-Type:\s*([a-z-Z\/]*)\s/';
+        preg_match($TypePatern, $header, $responseType);
+        if(strtolower($responseType[1]) == 'application/zip') {
+            $filePatern = '/filename\=\"([a-zA-Z0-9\.]+)\"/';
+            preg_match($filePatern, $header, $fileName);
+            file_put_contents(self::defaultFilePath.$fileName[1], substr($this->rawResponse, $header_size));
+            $this->response = array('path' =>self::defaultFilePath.$fileName[1]);
+        } else {
+            $this->response = json_decode( substr($this->rawResponse, $header_size), true );
+        }
         return $this->response;
     }
 

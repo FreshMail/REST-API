@@ -128,7 +128,7 @@ class FmRestApi
             return $this->rawResponse;
         }
 
-        $this->_getResponseFromHeaders();
+        $this->_getResponseFromHeaders($resCurl);
 
         if ($this->httpCode != 200) {
             $this->errors = $this->response['errors'];

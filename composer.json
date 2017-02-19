@@ -1,23 +1,43 @@
 {
-    "name": "FreshMail/REST-API",
-    "description": "REST API",
+    "name": "freshmail/rest-api",
+    "description": "A php library which implements the functionality of FreshMail REST API.",
+    "keywords": ["freshmail", "rest"],
+    "type": "library",
     "license": "GPL-3.0",
-    "authors": [{
-        "name": "Tadeusz Kania",
-        "email": "tadeusz.kania@freshmail.pl",
-        "homepage": "https://freshmail.pl",
-        "role": "Developer"
-      },{
-        "name": "Piotr Suszalski",
-        "email": "piotr.suszalski@freshmail.pl",
-        "homepage": "https://freshmail.pl",
-        "role": "Developer"
-      }
+    "authors": [
+        {
+            "name": "Tadeusz Kania",
+            "email": "tadeusz.kania@freshmail.pl",
+            "homepage": "https://freshmail.pl",
+            "role": "Developer"
+        },
+        {
+            "name": "Piotr Suszalski",
+            "email": "piotr.suszalski@freshmail.pl",
+            "homepage": "https://freshmail.pl",
+            "role": "Developer"
+        },
+        {
+            "name": "Grzegorz Gorczyca",
+            "email": "grzegorz.gorczyca@freshmail.pl",
+            "homepage": "https://freshmail.pl",
+            "role": "Developer"
+        },
+        {
+            "name": "Piotr Leżoń",
+            "email": "piotr.lezon@freshmail.pl",
+            "homepage": "https://freshmail.pl",
+            "role": "Developer"
+        }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "ext-curl": "*",
+        "ext-json": "*"
     },
     "autoload": {
-        "files": ["class.rest.php", "config.php"]
+        "psr-0": {
+            "FreshMail": "src/"
+        }
     }
 }

@@ -43,7 +43,7 @@ class RestApi
     /**
      * @var array
      */
-    private $errors = [];
+    private $errors = array();
 
     /**
      * Get errors.
@@ -131,7 +131,7 @@ class RestApi
         return $this;
     }
 
-    public function doRequest($strUrl, $arrParams = [], $returnRawResponse = false)
+    public function doRequest($strUrl, $arrParams = array(), $returnRawResponse = false)
     {
         if (empty($arrParams)) {
             $strPostData = '';
@@ -143,7 +143,7 @@ class RestApi
 
         $apiSignature = sha1($this->strApiKey . '/' . self::PREFIX . $strUrl . $strPostData . $this->strApiSecret);
 
-        $headers = [];
+        $headers = array();
         $headers[] = 'X-Rest-ApiKey: ' . $this->strApiKey;
         $headers[] = 'X-Rest-ApiSign: ' . $apiSignature;
 
@@ -199,9 +199,9 @@ class RestApi
             preg_match('/filename\=\"([a-zA-Z0-9\.]+)\"/', $headers, $fileName);
             file_put_contents(self::DEFAULT_FILE_PATH . $fileName[1], substr($this->rawResponse, $headerSize));
 
-            $this->response = [
+            $this->response = array(
                 'path' => self::DEFAULT_FILE_PATH . $fileName[1]
-            ];
+            );
         } else {
             $this->response = json_decode(substr($this->rawResponse, $headerSize), true);
         }

@@ -20,12 +20,17 @@ class RestApi
     /**
      * @var string
      */
-    private $strApiSecret;
+    private $apiSecret;
 
     /**
      * @var string
      */
-    private $strApiKey;
+    private $apiKey;
+
+    /**
+     * @var string
+     */
+    private $token;
 
     private $response     = null;
     private $rawResponse  = null;
@@ -98,8 +103,8 @@ class RestApi
      */
     public function setApiKey($apiKey)
     {
-        $this->strApiKey = $apiKey;
-
+        $this->apiKey = $apiKey;
+        $this->token = '';
         return $this;
     }
 
@@ -112,8 +117,20 @@ class RestApi
      */
     public function setApiSecret($apiSecret)
     {
-        $this->strApiSecret = $apiSecret;
+        $this->apiSecret = $apiSecret;
+        $this->token = '';
+        return $this;
+    }
 
+    /**
+     * @param $token
+     * @return $this
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+        $this->apiKey = '';
+        $this->apiSecret = '';
         return $this;
     }
 
@@ -141,11 +158,14 @@ class RestApi
             $strPostData = http_build_query($arrParams);
         }
 
-        $apiSignature = sha1($this->strApiKey . '/' . self::PREFIX . $strUrl . $strPostData . $this->strApiSecret);
-
         $headers = array();
-        $headers[] = 'X-Rest-ApiKey: ' . $this->strApiKey;
-        $headers[] = 'X-Rest-ApiSign: ' . $apiSignature;
+        if ($this->token) {
+            $headers[] = sprintf('Authorization: Bearer %s', $this->token);
+        } elseif ($this->apiKey) {
+            $apiSignature = sha1($this->apiKey . '/' . self::PREFIX . $strUrl . $strPostData . $this->apiSecret);
+            $headers[] = sprintf('X-Rest-ApiKey: %s', $this->apiKey);
+            $headers[] = sprintf('X-Rest-ApiSign: %s', $apiSignature);
+        }
 
         if (!empty($this->contentType)) {
             $headers[] = 'Content-Type: ' . $this->contentType;
@@ -205,21 +225,5 @@ class RestApi
         } else {
             $this->response = json_decode(substr($this->rawResponse, $headerSize), true);
         }
-    }
-
-    /**
-     * Calculate request signature.
-     *
-     * @param string $apiKey
-     * @param string $address
-     * @param string $getData
-     * @param string $postData
-     * @param string $apiSecret
-     *
-     * @return string
-     */
-    private function calculateSignature($apiKey, $address, $getData, $postData, $apiSecret)
-    {
-        return sha1($apiKey . $address . $getData . $postData . $apiSecret);
     }
 }

@@ -15,7 +15,7 @@ class RestApi
     const HOST   = 'https://api.freshmail.com/';
     const PREFIX = 'rest/';
 
-    CONST DEFAULT_FILE_PATH = '/tmp/';
+    const DEFAULT_FILE_PATH = '/tmp/';
 
     /**
      * @var string
@@ -32,7 +32,14 @@ class RestApi
      */
     private $token;
 
+    /**
+     * @var array
+     */
     private $response     = null;
+
+    /**
+     * @var string
+     */
     private $rawResponse  = null;
 
     /**
@@ -53,7 +60,7 @@ class RestApi
     /**
      * Get errors.
      *
-     * @return array
+     * @return array|null
      */
     public function getErrors()
     {
@@ -64,9 +71,9 @@ class RestApi
         return null;
     }
 
-     /**
-      * Get response.
-      *
+    /**
+     * Get response.
+     *
      * @return array
      */
     public function getResponse()
@@ -74,20 +81,20 @@ class RestApi
         return $this->response;
     }
 
-     /**
-      * Get raw response.
-      *
-     * @return array
+    /**
+     * Get raw response.
+     *
+     * @return string
      */
     public function getRawResponse()
     {
         return $this->rawResponse;
     }
 
-     /**
-      * Get HTTP code.
-      *
-     * @return array
+    /**
+     * Get HTTP code.
+     *
+     * @return int
      */
     public function getHttpCode()
     {
@@ -148,6 +155,18 @@ class RestApi
         return $this;
     }
 
+    /**
+     * Fire request
+     *
+     * @param string $strUrl - URL path
+     * @param array $arrParams - Data
+     * @param bool $returnRawResponse - Return raw response
+     *
+     * @return array|string - Response
+     *
+     * @throws \FreshMail\RestException
+     * @throws \Exception
+     */
     public function doRequest($strUrl, $arrParams = array(), $returnRawResponse = false)
     {
         if (empty($arrParams)) {
@@ -208,6 +227,13 @@ class RestApi
         return $this->response;
     }
 
+    /**
+     * Parse Curl response
+     *
+     * @param resource $cUrl
+     *
+     * @return void
+     */
     private function getResponseFromHeaders($cUrl)
     {
         $headerSize = curl_getinfo($cUrl, CURLINFO_HEADER_SIZE);

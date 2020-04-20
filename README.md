@@ -10,17 +10,17 @@ This API client covers all functions of API V2 such as:
 
 If You want to send transactional messages in rich format please use new [API V3 client](https://github.com/FreshMail/php-api-client).
 
-## Installation via composer
+## Installation via composer (compatible with PHP >=7.0)
 
 Add via composer:
     
-    composer require freshmail/rest-api:^2.0
+    composer require freshmail/rest-api:^3.0
 
 ## Installation of old version of library (compatible with PHP >=5.3)
 
 Add via composer:
     
-    composer require freshmail/rest-api:^1.0
+    composer require freshmail/rest-api:^2.0
 
 ## Usage
 

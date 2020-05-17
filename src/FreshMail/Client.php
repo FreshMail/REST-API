@@ -20,7 +20,7 @@ class Client
     const PREFIX = 'rest';
     const VERSION = 'v2';
 
-    const CLIENT_VERSION = '2.0';
+    const CLIENT_VERSION = '3.0';
 
     /**
      * Bearer Token for authorization

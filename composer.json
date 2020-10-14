@@ -35,7 +35,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "psr/log": "^1.1",
-        "monolog/monolog": "^1.25",
+        "monolog/monolog": "^2.1",
         "guzzlehttp/guzzle": "^6.5"
     },
     "autoload": {

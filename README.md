@@ -62,7 +62,7 @@ Below some simple examples, for whole API function see [full API V2 doc](https:/
     
     $apiClient->doRequest('subscriber/add', $data);
 
-#### get file from async api
+#### Get file from async api
 
     use \FreshMail\ApiV2\Client;
 

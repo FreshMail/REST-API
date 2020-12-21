@@ -62,6 +62,21 @@ Below some simple examples, for whole API function see [full API V2 doc](https:/
     
     $apiClient->doRequest('subscriber/add', $data);
 
+#### get file from async api
+
+    use \FreshMail\ApiV2\Client;
+
+    $token = 'MY_APP_TOKEN';
+    $apiClient = new Client($token);
+
+    $data = [
+        'id_job' => 'XXX'
+    ];
+
+    $zipContent = $apiClient->doFileRequest('async_result/getFile', $data);
+
+    file_put_contents('/testLocation/testfile.zip', $zipContent);
+
 ## Proxy setup
 
 To use proxy You can pass Your own GuzzleHttp Client:

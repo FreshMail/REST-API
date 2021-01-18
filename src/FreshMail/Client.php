@@ -84,6 +84,33 @@ class Client
     }
 
     /**
+     * @param $uri
+     * @param array $params
+     * @return string
+     * @throws Exception
+     */
+    public function doFileRequest(string $uri, array $params = [])
+    {
+        try {
+            $method = ($params) ? 'POST' : 'GET';
+
+            $response = $this->guzzle->request($method, $uri, $this->getRequestOptions($params));
+            if ($response->getHeaderLine('Content-Type') !== 'application/zip') {
+                throw new ServerException(sprintf('Response content type is not supported: %s', $response->getHeaderLine('Content-Type')));
+            }
+            return  $response->getBody()->getContents();
+        } catch (\GuzzleHttp\Exception\ClientException $exception) {
+            if ($exception->getCode() == 401) {
+                throw new UnauthorizedException('Request unauthorized');
+            }
+
+            throw new \FreshMail\ApiV2\ClientException(sprintf('Connection error, error message: '.$exception->getMessage()));
+        } catch (\GuzzleHttp\Exception\ConnectException $exception) {
+            throw new ConnectionException(sprintf('Connection error, error message: '.$exception->getMessage()));
+        }
+    }
+
+    /**
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)

@@ -74,7 +74,10 @@ class Client
                 throw new UnauthorizedException('Request unauthorized');
             }
 
-            throw new \FreshMail\ApiV2\ClientException(sprintf('Connection error, error message: '.$exception->getMessage()));
+            throw new \FreshMail\ApiV2\ClientException(sprintf(
+                'Connection error, error message: %s',
+                $exception->getResponse()->getBody()->getContents()
+            ));
         } catch (\GuzzleHttp\Exception\ConnectException $exception) {
             throw new ConnectionException(sprintf('Connection error, error message: '.$exception->getMessage()));
         }

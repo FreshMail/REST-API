@@ -101,12 +101,12 @@ class Client
             return  $response->getBody()->getContents();
         } catch (\GuzzleHttp\Exception\ClientException $exception) {
             if ($exception->getCode() == 401) {
-                throw new UnauthorizedException('Request unauthorized');
+                throw new UnauthorizedException('Request unauthorized', 401);
             }
 
-            throw new \FreshMail\ApiV2\ClientException(sprintf('Connection error, error message: '.$exception->getMessage()));
+            throw new \FreshMail\ApiV2\ClientException($exception->getMessage(), $exception->getResponse()->getStatusCode());
         } catch (\GuzzleHttp\Exception\ConnectException $exception) {
-            throw new ConnectionException(sprintf('Connection error, error message: '.$exception->getMessage()));
+            throw new ConnectionException($exception->getMessage());
         }
     }
 

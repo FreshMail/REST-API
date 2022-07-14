@@ -6,6 +6,8 @@ use Exception;
 use FreshMail\ApiV2\Factory\MonologFactory;
 use GuzzleHttp\RequestOptions;
 use Psr\Log\LoggerInterface;
+use function is_array;
+use function json_decode;
 
 /**
  *  Class to make proper request (with authorization) to FreshMail Rest API V2
@@ -74,10 +76,16 @@ class Client
                 throw new UnauthorizedException('Request unauthorized');
             }
 
+            $code = 0;
+            $res = json_decode($exception->getResponse()->getBody()->getContents());
+            if (NULL !== $res && is_array($res->errors)) {
+                $code = array_pop($res->errors)->code ?? 0;
+            }
+
             throw new \FreshMail\ApiV2\ClientException(sprintf(
                 'Connection error, error message: %s',
                 $exception->getResponse()->getBody()->getContents()
-            ));
+            ), $code);
         } catch (\GuzzleHttp\Exception\ConnectException $exception) {
             throw new ConnectionException(sprintf('Connection error, error message: '.$exception->getMessage()));
         }

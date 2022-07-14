@@ -95,8 +95,8 @@ class Client
             $method = ($params) ? 'POST' : 'GET';
 
             $response = $this->guzzle->request($method, $uri, $this->getRequestOptions($params));
-            if ($response->getHeaderLine('Content-Type') !== 'application/zip') {
-                throw new ServerException(sprintf('Response content type is not supported: %s', $response->getHeaderLine('Content-Type')));
+            if ($response->getHeaderLine('content-type') !== 'application/zip') {
+                throw new ServerException(sprintf('Response content type is not supported: %s', $response->getHeaderLine('content-type')));
             }
             return  $response->getBody()->getContents();
         } catch (\GuzzleHttp\Exception\ClientException $exception) {
@@ -135,10 +135,10 @@ class Client
             'base_uri' => sprintf('%s://%s/%s/', self::SCHEME, self::HOST, self::PREFIX),
             RequestOptions::BODY => json_encode($requestData),
             RequestOptions::HEADERS => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->bearerToken,
-                'User-Agent' => $this->createUserAgent()
+                'accept' => 'application/json',
+                'content-type' => 'application/json',
+                'authorization' => 'Bearer ' . $this->bearerToken,
+                'user-agent' => $this->createUserAgent()
             ]
         ];
     }
